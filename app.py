@@ -70,20 +70,31 @@ with st.form("career_form"):
 
     submitted = st.form_submit_button("🔍 Get Career Suggestions")
 
+if submitted:
+    matched_careers = []
+
+    # Clean inputs for better matching
+    all_skills = [s.strip().lower() for s in soft_skills]
+    if other_soft_skills:
+        all_skills.extend([s.strip().lower() for s in other_soft_skills.split(",")])
+
+    fav_subjects_list = [s.strip().lower() for s in fav_subjects.split(",")]
+    style = work_style.lower()
+
     for career, data in career_data.items():
         # Match skills
         skill_match = any(skill.lower() in all_skills for skill in data["skills"])
-        
+
         # Match subjects
         subject_match = any(sub.lower() in fav_subjects_list for sub in data["subjects"])
-        
+
         # Match work style
         style_match = (data["work_style"].lower() in style) or (style == "both")
 
-        # Show debug info (optional, remove later if you want)
+        # Debug info (optional)
         st.write(f"Checking {career}: skills={skill_match}, subjects={subject_match}, style={style_match}")
 
-        # Count how many things matched
+        # Scoring system (match at least 2 out of 3)
         score = 0
         if skill_match:
             score += 1
@@ -92,27 +103,8 @@ with st.form("career_form"):
         if style_match:
             score += 1
 
-        # Recommend if 2 or more things matched
         if score >= 2:
             matched_careers.append(career)
-
-
-    for career, data in career_data.items():
-        skill_match = any(skill.lower() in all_skills for skill in data["skills"])
-        subject_match = any(sub.lower() in fav_subjects_list for sub in data["subjects"])
-        style_match = (data["work_style"].lower() in style) or (style == "both")
-
-        score = 0
-if skill_match:
-    score += 1
-if subject_match:
-    score += 1
-if style_match:
-    score += 1
-
-if score >= 2:  # if 2 or more matches
-    matched_careers.append(career)
-
 
     st.subheader("✅ Recommended Career Paths for You:")
 
@@ -121,6 +113,7 @@ if score >= 2:  # if 2 or more matches
             st.write(f"{i}. {job}")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+
 
 
 
