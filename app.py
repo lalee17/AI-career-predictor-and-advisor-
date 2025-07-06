@@ -91,8 +91,7 @@ if submitted:
         # Match work style
         style_match = (data["work_style"].lower() in style) or (style == "both")
 
-        # Debug info (optional)
-        st.write(f"Checking {career}: skills={skill_match}, subjects={subject_match}, style={style_match}")
+       
 
         # Scoring system (match at least 2 out of 3)
         score = 0
