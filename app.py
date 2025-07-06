@@ -82,18 +82,10 @@ if submitted:
     style = work_style.lower()
 
     for career, data in career_data.items():
-        # Match skills
         skill_match = any(skill.lower() in all_skills for skill in data["skills"])
-
-        # Match subjects
         subject_match = any(sub.lower() in fav_subjects_list for sub in data["subjects"])
-
-        # Match work style
         style_match = (data["work_style"].lower() in style) or (style == "both")
 
-       
-
-        # Scoring system (match at least 2 out of 3)
         score = 0
         if skill_match:
             score += 1
