@@ -7,6 +7,11 @@ st.title("🎓 AI Career Predictor and Advisor")
 # --- Step 1: Input Form ---
 with st.form("career_form"):
     name = st.text_input("What's your name?")
+     age = st.text_input("How old are you?")
+    educational level = st.multiselect(
+        "Choose your educational level",
+        ["Grade10","Grade11","A/L Student","University student","othe"]
+         )
     
     skills = st.multiselect(
         "What skills do you have?",
