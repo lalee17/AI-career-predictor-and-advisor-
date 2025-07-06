@@ -30,7 +30,6 @@ career_data = {
 }
 
 st.title("🎓 AI Career Predictor & Advisor")
-
 st.markdown("This form collects your interests, skills, preferences and other details to recommend suitable career paths.")
 
 with st.form("career_form"):
@@ -59,12 +58,11 @@ with st.form("career_form"):
     other_soft_skills = st.text_input("Other soft skills (if any):")
 
     preferred_field = st.text_input("10. Do you have any preferred career field?")
-    work_style = st.radio(
-    "How do you prefer to work?",
-    ["Alone", "In a team", "Both"]
-)
 
-st.write("You selected:", work_style)
+    work_style = st.radio(
+        "11. How do you prefer to work?",
+        ["Alone", "In a team", "Both"]
+    )
 
     tools = st.text_area("12. List any digital tools, platforms, or courses you've used or learned.")
     existing_ideas = st.text_area("13. Do you already have any career ideas in mind?")
@@ -97,6 +95,7 @@ if submitted:
             st.write(f"{i}. {job}")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+
 
 
 
