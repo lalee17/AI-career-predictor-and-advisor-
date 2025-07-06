@@ -1,108 +1,96 @@
 import streamlit as st
 
-st.set_page_config(page_title="AI Career Predictor", layout="centered")
-
-st.title("🎓 AI Career Predictor and Advisor")
-
-# --- Step 1: Input Form ---
-with st.form("career_form"):
-    name = st.text_input("What's your name?")
-     age = st.text_input("How old are you?")
-    educational level = st.multiselect(
-        "Choose your educational level",
-        ["Grade10","Grade11","A/L Student","University student","othe"]
-         )
-    
-    skills = st.multiselect(
-        "What skills do you have?",
-        ["problem solving", "programming", "statistics", "design", "data analysis", "algorithms", "creativity", "communication"]
-    )
-    
-    interests = st.multiselect(
-        "What are your interests?",
-        ["AI", "designing interfaces", "coding", "building apps", "debugging", "user experience", "predictive models", "art"]
-    )
-    
-    submitted = st.form_submit_button("Get My Career Recommendation")
-
-# --- Step 2: Career Data & Logic ---
-career_data = [
-    {
-        "career": "Software Engineer",
-        "skills": ["problem solving", "programming", "algorithms"],
-        "interests": ["building apps", "coding", "debugging"]
+# Sample career dataset
+career_data = {
+    "Software Engineer": {
+        "skills": ["Logical thinking", "Problem solving", "Technology", "Coding"],
+        "subjects": ["Mathematics", "ICT"],
+        "work_style": "Alone"
     },
-    {
-        "career": "Data Scientist",
-        "skills": ["statistics", "programming", "data analysis"],
-        "interests": ["AI", "predictive models", "working with data"]
+    "Digital Marketer": {
+        "skills": ["Creativity", "Communication", "Empathy", "Public Speaking"],
+        "subjects": ["Business Studies", "English"],
+        "work_style": "Team"
     },
-    {
-        "career": "UI/UX Designer",
-        "skills": ["creativity", "design", "communication"],
-        "interests": ["designing interfaces", "user experience", "art"]
+    "Graphic Designer": {
+        "skills": ["Creativity", "Design", "Attention to detail"],
+        "subjects": ["Art", "Media", "ICT"],
+        "work_style": "Alone"
     },
-    {
-        "career": "AI Engineer",
-        "skills": ["programming", "statistics", "algorithms"],
-        "interests": ["AI", "predictive models", "coding"]
+    "Data Scientist": {
+        "skills": ["Logical thinking", "Attention to detail", "Problem solving"],
+        "subjects": ["Mathematics", "Science", "ICT"],
+        "work_style": "Alone"
     },
-    {
-        "career": "Frontend Developer",
-        "skills": ["programming", "design", "creativity"],
-        "interests": ["designing interfaces", "building apps", "user experience"]
-    },
-    {
-        "career": "Backend Developer",
-        "skills": ["problem solving", "programming", "algorithms"],
-        "interests": ["debugging", "coding", "building apps"]
-    },
-    {
-        "career": "Data Analyst",
-        "skills": ["statistics", "data analysis", "communication"],
-        "interests": ["working with data", "predictive models", "AI"]
-    },
-    {
-        "career": "Product Manager",
-        "skills": ["communication", "problem solving", "organization"],
-        "interests": ["user experience", "building apps", "teamwork"]
-    },
-    {
-        "career": "Graphic Designer",
-        "skills": ["design", "creativity", "communication"],
-        "interests": ["art", "user experience", "designing interfaces"]
-    },
-    {
-        "career": "DevOps Engineer",
-        "skills": ["problem solving", "programming", "automation"],
-        "interests": ["building apps", "debugging", "efficiency"]
+    "Psychologist": {
+        "skills": ["Empathy", "Communication", "Teamwork"],
+        "subjects": ["Biology", "English", "Psychology"],
+        "work_style": "Team"
     }
-]
+}
 
-def compute_fit_score(user_skills, user_interests, career):
-    skill_matches = len(set(user_skills) & set(career["skills"]))
-    interest_matches = len(set(user_interests) & set(career["interests"]))
-    return skill_matches + interest_matches
+st.title("🎓 AI Career Predictor & Advisor")
 
-def recommend_career(user_skills, user_interests, data):
-    scores = []
-    for career in data:
-        score = compute_fit_score(user_skills, user_interests, career)
-        scores.append((career["career"], score))
-    scores.sort(key=lambda x: x[1], reverse=True)
-    return scores[0] if scores else ("No match found", 0)
+st.markdown("This form collects your interests, skills, preferences and other details to recommend suitable career paths.")
 
-# --- Step 3: Show Recommendation ---
+with st.form("career_form"):
+    name = st.text_input("1. Full Name")
+    age = st.number_input("2. Age", min_value=10, max_value=100)
+    grade = st.selectbox("3. Grade or Education Level", ["Grade 10", "Grade 11", "A/L Student", "University student", "Other"])
+
+    fav_subjects = st.text_input("4. What are your favorite subjects in school?")
+    weak_subjects = st.text_input("5. Which subjects do you dislike or struggle with?")
+    hobbies = st.text_input("6. What are your hobbies or interests?")
+
+    task_preference = st.multiselect(
+        "7. What type of tasks do you enjoy most?",
+        ["Solving problems", "Talking to people", "Designing or creating things", "Working with technology",
+         "Writing or research", "Planning or organizing", "Leading others", "Other"]
+    )
+
+    st.markdown("8. Your MBTI personality type (find it here: [16personalities](https://www.16personalities.com/))")
+    mbti = st.text_input("Enter your MBTI type")
+
+    soft_skills = st.multiselect(
+        "9. What soft skills describe you?",
+        ["Leadership", "Communication", "Teamwork", "Creativity", "Attention to detail",
+         "Logical thinking", "Empathy", "Public Speaking"]
+    )
+    other_soft_skills = st.text_input("Other soft skills (if any):")
+
+    preferred_field = st.text_input("10. Do you have any preferred career field?")
+    work_style = st.radio("11. How do you prefer to work?", ["Alone", "In a team", "Both"])
+    tools = st.text_area("12. List any digital tools, platforms, or courses you've used or learned.")
+    existing_ideas = st.text_area("13. Do you already have any career ideas in mind?")
+    career_preferences = st.text_area("14. Fields or careers you'd like to work in:")
+
+    submitted = st.form_submit_button("🔍 Get Career Suggestions")
+
 if submitted:
-    if not skills and not interests:
-        st.warning("Please select at least one skill or interest.")
-    else:
-        career, score = recommend_career(skills, interests, career_data)
-        st.success(f"🎯 **Hi {name}!** Based on your profile, you might enjoy being a **{career}**.")
-        st.info(f"✅ Fit Score: {score}/6 (out of 3 skill + 3 interest matches)")
+    matched_careers = []
 
-    st.write("Skills:", skills)
-    st.write("Interests:", interests)
-    st.write("Work Style:", work_style)
+    # Clean inputs for better matching
+    all_skills = [s.lower() for s in soft_skills]
+    if other_soft_skills:
+        all_skills.extend(other_soft_skills.lower().split(","))
+    fav_subjects_list = [s.strip().lower() for s in fav_subjects.split(",")]
+    style = work_style.lower()
+
+    for career, data in career_data.items():
+        skill_match = any(skill.lower() in all_skills for skill in data["skills"])
+        subject_match = any(sub.lower() in fav_subjects_list for sub in data["subjects"])
+        style_match = (data["work_style"].lower() in style) or (style == "both")
+
+        if skill_match and subject_match and style_match:
+            matched_careers.append(career)
+
+    st.subheader("✅ Recommended Career Paths for You:")
+
+    if matched_careers:
+        for i, job in enumerate(matched_careers, 1):
+            st.write(f"{i}. {job}")
+    else:
+        st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+
 
 
