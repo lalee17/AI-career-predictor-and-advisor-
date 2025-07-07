@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Sample career dataset
+# Full career dataset with all careers you provided
 career_data = {
     "Software Engineer": {
         "skills": ["Programming", "Problem solving", "Logical thinking"],
@@ -250,7 +250,7 @@ if submitted:
 
     if matched_careers:
         for i, job in enumerate(matched_careers, 1):
-            st.write(f"{i}. {job}")
+            st.write(f"{i}. {job} — {career_data[job]['description']}")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
 
