@@ -178,7 +178,6 @@ career_data = {
     }
 }
 
-
 st.title("🎓 AI Career Predictor & Advisor")
 st.markdown("This form collects your interests, skills, preferences and other details to recommend suitable career paths.")
 
@@ -254,7 +253,8 @@ if submitted:
             st.write(f"{i}. {job}")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
-     st.header("🗣️ Career Advice Chatbot")
+
+st.header("🗣️ Career Advice Chatbot")
 
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
@@ -290,7 +290,7 @@ if user_input:
 for chat in st.session_state.chat_history:
     with st.chat_message(chat["role"]):
         st.markdown(chat["content"])
-   
+
 
 
 
