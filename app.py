@@ -196,8 +196,7 @@ with st.form("career_form"):
          "Writing or research", "Planning or organizing", "Leading others", "Other"]
     )
 
-    st.markdown("8. Your MBTI personality type (find it here: [16personalities](https://www.16personalities.com/))")
-    mbti = st.text_input("Enter your MBTI type")
+    
 
     soft_skills = st.multiselect(
         "9. What soft skills describe you?",
