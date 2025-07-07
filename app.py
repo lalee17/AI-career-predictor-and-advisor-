@@ -205,7 +205,7 @@ with st.form("career_form"):
     )
     other_soft_skills = st.text_input("Other soft skills (if any):")
 
-    preferred_field = st.text_input("10. Do you have any preferred career field?")
+    
 
     work_style = st.radio(
         "11. How do you prefer to work?",
