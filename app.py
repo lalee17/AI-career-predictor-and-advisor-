@@ -249,8 +249,7 @@ if submitted:
 
     if matched_careers:
         for i, job in enumerate(matched_careers, 1):
-            description = career_data[job].get("description", "No description available.")
-st.markdown(f"**{i}. {job}**  \n_{description}_")
+            st.write(f"{i}. {job} — {career_data[job]['description']}"))
  
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
