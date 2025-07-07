@@ -3,31 +3,181 @@ import streamlit as st
 # Sample career dataset
 career_data = {
     "Software Engineer": {
-        "skills": ["Logical thinking", "Problem solving", "Technology", "Coding"],
+        "skills": ["Programming", "Problem solving", "Logical thinking"],
         "subjects": ["Mathematics", "ICT"],
-        "work_style": "Alone"
+        "work_style": "Alone",
+        "description": "Designs and develops software applications."
     },
     "Digital Marketer": {
-        "skills": ["Creativity", "Communication", "Empathy", "Public Speaking"],
+        "skills": ["Creativity", "Communication", "Public Speaking"],
         "subjects": ["Business Studies", "English"],
-        "work_style": "Team"
+        "work_style": "Team",
+        "description": "Promotes products or services using digital channels."
     },
     "Graphic Designer": {
         "skills": ["Creativity", "Design", "Attention to detail"],
         "subjects": ["Art", "Media", "ICT"],
-        "work_style": "Alone"
+        "work_style": "Alone",
+        "description": "Creates visual content to communicate ideas."
     },
     "Data Scientist": {
         "skills": ["Logical thinking", "Attention to detail", "Problem solving"],
         "subjects": ["Mathematics", "Science", "ICT"],
-        "work_style": "Alone"
+        "work_style": "Alone",
+        "description": "Analyzes complex data to help decision making."
     },
     "Psychologist": {
         "skills": ["Empathy", "Communication", "Teamwork"],
         "subjects": ["Biology", "English", "Psychology"],
-        "work_style": "Team"
+        "work_style": "Team",
+        "description": "Helps people improve mental health and wellbeing."
+    },
+    "Teacher": {
+        "skills": ["Communication", "Patience", "Leadership"],
+        "subjects": ["Varies by subject"],
+        "work_style": "Team",
+        "description": "Educates students at various levels."
+    },
+    "Mechanical Engineer": {
+        "skills": ["Problem solving", "Math", "Design"],
+        "subjects": ["Mathematics", "Physics"],
+        "work_style": "Alone",
+        "description": "Designs and builds mechanical systems."
+    },
+    "Nurse": {
+        "skills": ["Empathy", "Attention to detail", "Teamwork"],
+        "subjects": ["Biology", "Health Science"],
+        "work_style": "Team",
+        "description": "Provides healthcare and support to patients."
+    },
+    "Journalist": {
+        "skills": ["Communication", "Research", "Writing"],
+        "subjects": ["English", "Media Studies"],
+        "work_style": "Alone",
+        "description": "Gathers and reports news stories."
+    },
+    "Chef": {
+        "skills": ["Creativity", "Attention to detail", "Time management"],
+        "subjects": ["Home Economics"],
+        "work_style": "Team",
+        "description": "Prepares meals in restaurants or other venues."
+    },
+    "Civil Engineer": {
+        "skills": ["Problem solving", "Math", "Project management"],
+        "subjects": ["Mathematics", "Physics"],
+        "work_style": "Team",
+        "description": "Designs and supervises construction projects."
+    },
+    "Accountant": {
+        "skills": ["Attention to detail", "Math", "Organization"],
+        "subjects": ["Mathematics", "Business Studies"],
+        "work_style": "Alone",
+        "description": "Manages financial records and reports."
+    },
+    "Pharmacist": {
+        "skills": ["Attention to detail", "Science", "Communication"],
+        "subjects": ["Biology", "Chemistry"],
+        "work_style": "Alone",
+        "description": "Dispenses medications and advises patients."
+    },
+    "Architect": {
+        "skills": ["Design", "Creativity", "Problem solving"],
+        "subjects": ["Art", "Mathematics", "Physics"],
+        "work_style": "Team",
+        "description": "Designs buildings and structures."
+    },
+    "Lawyer": {
+        "skills": ["Communication", "Research", "Critical thinking"],
+        "subjects": ["English", "History"],
+        "work_style": "Alone",
+        "description": "Provides legal advice and representation."
+    },
+    "Electrician": {
+        "skills": ["Problem solving", "Technical skills", "Attention to detail"],
+        "subjects": ["Physics", "Technical Drawing"],
+        "work_style": "Alone",
+        "description": "Installs and maintains electrical systems."
+    },
+    "Social Worker": {
+        "skills": ["Empathy", "Communication", "Problem solving"],
+        "subjects": ["Psychology", "Sociology"],
+        "work_style": "Team",
+        "description": "Supports individuals and communities in need."
+    },
+    "Pilot": {
+        "skills": ["Attention to detail", "Technical skills", "Calm under pressure"],
+        "subjects": ["Physics", "Mathematics"],
+        "work_style": "Alone",
+        "description": "Operates aircraft safely."
+    },
+    "Veterinarian": {
+        "skills": ["Science", "Empathy", "Attention to detail"],
+        "subjects": ["Biology", "Chemistry"],
+        "work_style": "Alone",
+        "description": "Provides medical care to animals."
+    },
+    "Entrepreneur": {
+        "skills": ["Leadership", "Risk-taking", "Creativity"],
+        "subjects": ["Business Studies", "Economics"],
+        "work_style": "Both",
+        "description": "Starts and manages new businesses."
+    },
+    "Translator": {
+        "skills": ["Language skills", "Attention to detail", "Communication"],
+        "subjects": ["Languages", "English"],
+        "work_style": "Alone",
+        "description": "Converts written or spoken language."
+    },
+    "Event Planner": {
+        "skills": ["Organization", "Communication", "Creativity"],
+        "subjects": ["Business Studies", "English"],
+        "work_style": "Team",
+        "description": "Organizes events and meetings."
+    },
+    "Fashion Designer": {
+        "skills": ["Creativity", "Design", "Attention to detail"],
+        "subjects": ["Art", "Textiles"],
+        "work_style": "Alone",
+        "description": "Creates clothing and accessories."
+    },
+    "Environmental Scientist": {
+        "skills": ["Research", "Science", "Problem solving"],
+        "subjects": ["Biology", "Chemistry", "Geography"],
+        "work_style": "Both",
+        "description": "Studies environmental problems and solutions."
+    },
+    "Animator": {
+        "skills": ["Creativity", "Design", "Technical skills"],
+        "subjects": ["Art", "ICT"],
+        "work_style": "Alone",
+        "description": "Creates animations for media."
+    },
+    "Police Officer": {
+        "skills": ["Physical fitness", "Communication", "Problem solving"],
+        "subjects": ["Physical Education", "Social Studies"],
+        "work_style": "Team",
+        "description": "Enforces laws and protects the public."
+    },
+    "Scientist": {
+        "skills": ["Research", "Analytical thinking", "Attention to detail"],
+        "subjects": ["Biology", "Chemistry", "Physics"],
+        "work_style": "Alone",
+        "description": "Conducts scientific experiments and research."
+    },
+    "Photographer": {
+        "skills": ["Creativity", "Technical skills", "Attention to detail"],
+        "subjects": ["Art", "Media Studies"],
+        "work_style": "Alone",
+        "description": "Takes professional photographs."
+    },
+    "Fitness Trainer": {
+        "skills": ["Physical fitness", "Motivation", "Communication"],
+        "subjects": ["Physical Education", "Biology"],
+        "work_style": "Team",
+        "description": "Helps clients improve fitness and health."
     }
 }
+
 
 st.title("🎓 AI Career Predictor & Advisor")
 st.markdown("This form collects your interests, skills, preferences and other details to recommend suitable career paths.")
