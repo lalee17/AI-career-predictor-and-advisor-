@@ -277,6 +277,13 @@ elif well_being_score == 3:
     st.info("You're unsure — maybe try learning more about each career before deciding.")
 else:
     st.success("Great! You're feeling positive. Keep exploring and preparing for your journey! 🚀")
+    if well_being_score <= 2:
+    st.warning("It looks like you're not feeling great about the options. You can ask a question below 👇")
+
+    concern = st.text_input("🗣️ What's bothering you about the careers suggested?")
+    if concern:
+        st.success("Thank you for sharing. We'll use this to improve future suggestions. ❤️")
+
 
 
 st.header("🗣️ Career Advice Chatbot")
