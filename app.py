@@ -264,6 +264,20 @@ if submitted:
             st.write(f"   Fit Score: {fit}/3 ({expl})")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+        # 🔍 Optional: Mental Well-being Check
+st.subheader("🧠 Mental Well-being Check")
+
+st.markdown("On a scale from 1 to 5, how do you feel about the recommended careers?")
+
+well_being_score = st.slider("How confident or happy do you feel about pursuing the above careers?", 1, 5)
+
+if well_being_score <= 2:
+    st.warning("It looks like you're not feeling great about the options. It's okay! Explore more or talk to a career counselor. 💬")
+elif well_being_score == 3:
+    st.info("You're unsure — maybe try learning more about each career before deciding.")
+else:
+    st.success("Great! You're feeling positive. Keep exploring and preparing for your journey! 🚀")
+
 
 st.header("🗣️ Career Advice Chatbot")
 
