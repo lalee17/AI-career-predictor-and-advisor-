@@ -257,14 +257,23 @@ if submitted:
 
     st.subheader("✅ Recommended Career Paths for You:")
 
-    if matched_careers:
-        for i, job in enumerate(matched_careers, 1):
-            fit = career_fit_details[job]["score"]
-            expl = career_fit_details[job]["explanation"]
-            st.write(f"{i}. {job} — {career_data[job]['description']}")
-            st.write(f"   Fit Score: {fit}/3 ({expl})")
-    else:
-        st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+ if matched_careers:
+    for i, job in enumerate(matched_careers, 1):
+        data = career_data[job]
+        fit = career_fit_details[job]["score"]
+        expl = career_fit_details[job]["explanation"]
+
+        st.markdown(f"### {i}. {job}")
+        st.markdown(f"**🧠 Description**: {data['description']}")
+        st.markdown(f"**✅ Fit Score**: {fit}/3 — *{expl}*")
+        st.markdown(f"**💰 Salary**: {data['average_salary']}")
+        st.markdown(f"**📈 Job Demand**: {data['job_demand']}")
+        st.markdown(f"**🛠 Recommended Tools & Skills**: {', '.join(data['recommended_tools'])}")
+        st.markdown(f"**📚 Suggested Learning Paths**: {', '.join(data['learning_paths'])}")
+        st.markdown("---")
+else:
+    st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+
         # 🔍 Optional: Mental Well-being Check
 st.subheader("🧠 Mental Well-being Check")
 
