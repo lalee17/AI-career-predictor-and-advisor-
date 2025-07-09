@@ -268,7 +268,6 @@ if submitted:
             st.markdown("---")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
-)
 
 
         # 🔍 Optional: Mental Well-being Check
