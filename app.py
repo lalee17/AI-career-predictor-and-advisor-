@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 # Load and parse the career.json file
 with open("career.json", "r") as f:
-    careers = json.load(f)
+    career_data = json.load(f)
 from sentence_transformers import SentenceTransformer
 import faiss
 
