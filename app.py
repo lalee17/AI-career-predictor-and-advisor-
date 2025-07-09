@@ -6,6 +6,27 @@ from pathlib import Path
 # Load and parse the career.json file
 with open("career.json", "r") as f:
     careers = json.load(f)
+from sentence_transformers import SentenceTransformer
+import faiss
+
+# Prepare data for embedding
+career_texts = []
+career_keys = []
+
+for career, details in career_data.items():
+    full_text = f"{career}: {details['description']} Skills: {', '.join(details['skills'])}. Subjects: {', '.join(details['subjects'])}. Salary: {details['average_salary']}. Demand: {details['job_demand']}."
+    career_texts.append(full_text)
+    career_keys.append(career)
+
+# Create embeddings
+model = SentenceTransformer('all-MiniLM-L6-v2')
+career_embeddings = model.encode(career_texts)
+
+# Create FAISS index
+dimension = career_embeddings[0].shape[0]
+faiss_index = faiss.IndexFlatL2(dimension)
+faiss_index.add(career_embeddings)
+
 
 # Prepare documents for retrieval (one document per career)
 career_documents = []
