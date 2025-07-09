@@ -1,11 +1,14 @@
 from sentence_transformers import SentenceTransformer
 import faiss
 import streamlit as st
-import json
+
 from pathlib import Path
+import json
 # Load and parse the career.json file
-with open("career.json", "r") as f:
+json_path = Path(__file__).parent / "career.json"
+with open(json_path, "r") as f:
     career_data = json.load(f)
+
 from sentence_transformers import SentenceTransformer
 import faiss
 
