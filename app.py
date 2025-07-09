@@ -221,8 +221,9 @@ with st.form("career_form"):
 
 if submitted:
     matched_careers = []
-    career_fit_details = {}  # To store fit scores and explanations
+    career_fit_details = {}
 
+    # Clean inputs for better matching
     all_skills = [s.strip().lower() for s in soft_skills]
     if other_soft_skills:
         all_skills.extend([s.strip().lower() for s in other_soft_skills.split(",")])
@@ -236,28 +237,25 @@ if submitted:
         style_match = (data["work_style"].lower() in style) or (style == "both")
 
         score = 0
-        explanation_parts = []
-
+        explanation = []
         if skill_match:
             score += 1
-            explanation_parts.append("skills matched")
+            explanation.append("Skills matched")
         if subject_match:
             score += 1
-            explanation_parts.append("favorite subjects matched")
+            explanation.append("Subjects matched")
         if style_match:
             score += 1
-            explanation_parts.append("work style matched")
+            explanation.append("Work style matched")
 
         if score >= 2:
             matched_careers.append(career)
             career_fit_details[career] = {
                 "score": score,
-                "explanation": ", ".join(explanation_parts)
+                "explanation": ", ".join(explanation)
             }
 
-    st.subheader("✅ Recommended Career Paths for You:")
-
-     if matched_careers:
+    if matched_careers:
         for i, job in enumerate(matched_careers, 1):
             fit = career_fit_details[job]["score"]
             expl = career_fit_details[job]["explanation"]
@@ -270,6 +268,7 @@ if submitted:
             st.markdown("---")
     else:
         st.info("We couldn't find a strong match. Try adding more subjects and skills.")
+)
 
 
         # 🔍 Optional: Mental Well-being Check
