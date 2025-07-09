@@ -1,4 +1,4 @@
-career_data = {
+"career_data" = {
   "Software Engineer": {
     "description": "Designs and develops software applications.",
     "skills": ["Programming", "Problem solving", "Logical thinking"],
