@@ -1,4 +1,25 @@
 import streamlit as st
+import json
+from pathlib import Path
+# Load and parse the career.json file
+with open("career.json", "r") as f:
+    careers = json.load(f)
+
+# Prepare documents for retrieval (one document per career)
+career_documents = []
+for title, details in careers.items():
+    text = f"Career: {title}\n"
+    text += f"Description: {details.get('description', '')}\n"
+    text += f"Skills: {', '.join(details.get('skills', []))}\n"
+    text += f"Subjects: {', '.join(details.get('subjects', []))}\n"
+    text += f"Work Style: {details.get('work_style', '')}\n"
+    text += f"Salary: {details.get('average_salary', '')}\n"
+    text += f"Demand: {details.get('job_demand', '')}\n"
+    text += f"Tools: {', '.join(details.get('recommended_tools', []))}\n"
+    text += f"Learning Paths: {', '.join(details.get('learning_paths', []))}\n"
+    career_documents.append(text)
+
+
 
 
 # Full career dataset with all careers you provided
