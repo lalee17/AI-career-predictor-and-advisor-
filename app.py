@@ -5,7 +5,7 @@ import streamlit as st
 from pathlib import Path
 import json
 # Load and parse the career.json file
-json_path = Path(__file__).parent / "career.json"
+json_path = Path(__file__).parent / "careers.json"
 with open(json_path, "r") as f:
     career_data = json.load(f)
 
