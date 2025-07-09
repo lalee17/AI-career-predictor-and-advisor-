@@ -33,7 +33,7 @@ faiss_index.add(career_embeddings)
 
 # Prepare documents for retrieval (one document per career)
 career_documents = []
-for title, details in careers.items():
+for title, details in career_data.items():
     text = f"Career: {title}\n"
     text += f"Description: {details.get('description', '')}\n"
     text += f"Skills: {', '.join(details.get('skills', []))}\n"
