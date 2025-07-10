@@ -1,6 +1,5 @@
 import json
 import streamlit as st
-
 from pathlib import Path
 
 # ✅ Load career dataset
