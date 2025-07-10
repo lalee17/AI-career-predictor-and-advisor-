@@ -1,4 +1,7 @@
 streamlit
+openai
+scikit-learn
+python-dotenv
 
 
 
