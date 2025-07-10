@@ -1,10 +1,6 @@
 import json
 import streamlit as st
-import os
 
-# ✅ Load OpenAI API key from secrets (you must set this in .streamlit/secrets.toml)
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # ✅ LangChain imports for RAG
 from langchain.vectorstores import FAISS as LC_FAISS
