@@ -5,17 +5,64 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 import json
 import streamlit as st
 from pathlib import Path
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-# ✅ Load career dataset
+# Load career dataset
 json_path = Path(__file__).parent / "careers.json"
 with open(json_path, "r") as f:
     career_data = json.load(f)
 
+# Convert your dict-style career_data to a list of dicts for easier processing
+career_list = []
+for title, details in career_data.items():
+    career_list.append({
+        "title": title,
+        **details
+    })
 
+# Prepare corpus for similarity search (for RAG retrieval)
+def create_corpus(careers):
+    corpus = []
+    for career in careers:
+        text = career["title"] + " "
+        text += career.get("description", "") + " "
+        text += " ".join(career.get("skills", [])) + " "
+        text += " ".join(career.get("subjects", []))
+        corpus.append(text)
+    return corpus
 
+corpus = create_corpus(career_list)
+vectorizer = TfidfVectorizer(stop_words="english")
+X = vectorizer.fit_transform(corpus)
 
+def retrieve_relevant_docs(query, top_k=3):
+    query_vec = vectorizer.transform([query])
+    similarities = cosine_similarity(query_vec, X).flatten()
+    top_indices = similarities.argsort()[-top_k:][::-1]
+    return [career_list[i] for i in top_indices]
 
-
+def generate_answer(question, relevant_docs):
+    context_text = ""
+    for doc in relevant_docs:
+        context_text += f"Career Title: {doc['title']}\nDescription: {doc.get('description')}\n\n"
+    prompt = (
+        f"You are an expert career advisor. Use the following career information to answer the question:\n\n"
+        f"{context_text}\n"
+        f"Question: {question}\nAnswer:"
+    )
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=prompt,
+            max_tokens=300,
+            temperature=0.7,
+            n=1,
+            stop=None,
+        )
+        return response.choices[0].text.strip()
+    except Exception as e:
+        return f"Sorry, I couldn't generate an answer due to an error: {str(e)}"
 
 # Full career dataset with all careers you provided
 career_data = {
@@ -601,6 +648,27 @@ if well_being_score <= 2:
     concern = st.text_input("🗣️ What's bothering you about the careers suggested?")
     if concern:
         st.success("Thank you for sharing. We'll use this to improve future suggestions. ❤️")
+
+elif choice == "Career Chatbot":
+    st.header("💬 Career Advisor Chatbot")
+    st.info("Ask me anything about careers! I will answer based on your career data and general knowledge.")
+
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+
+    user_input = st.text_input("You:", key="chat_input")
+
+    if user_input:
+        relevant_docs = retrieve_relevant_docs(user_input, top_k=3)
+        answer = generate_answer(user_input, relevant_docs)
+        st.session_state.chat_history.append(("You", user_input))
+        st.session_state.chat_history.append(("Bot", answer))
+
+    for i in range(0, len(st.session_state.chat_history), 2):
+        user_msg = st.session_state.chat_history[i][1]
+        bot_msg = st.session_state.chat_history[i + 1][1]
+        st.markdown(f"**You:** {user_msg}")
+        st.markdown(f"**Bot:** {bot_msg}")
 
 
 
