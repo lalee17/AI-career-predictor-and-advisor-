@@ -51,14 +51,21 @@ def generate_answer(question, relevant_docs):
         f"{context_text}\n"
         f"Question: {question}\nAnswer:"
     )
-    try:
-        response = openai.Completion.create(
-            engine="gpt-3.5-turbo",
-            prompt=prompt,
-            max_tokens=300,
-            temperature=0.7,
-            n=1,
-            stop=None,
+    from openai import OpenAI
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "user", "content": prompt},
+    ],
+    temperature=0.7,
+    n=1,
+)
+
+answer = response.choices[0].message.content
+
         )
         return response.choices[0].text.strip()
     except Exception as e:
