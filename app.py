@@ -599,6 +599,10 @@ if well_being_score <= 2:
     if concern:
         st.success("Thank you for sharing. We'll use this to improve future suggestions. ❤️")
 
+
+st.header("🗣 Career Advice Chatbot")
+if 'chat_history' not in st.session_state:
+    st.session_state['chat_history'] = []
 def find_career_answer(user_msg):
     user_msg_lower = user_msg.lower()
     # Try to find any career keyword in user message
