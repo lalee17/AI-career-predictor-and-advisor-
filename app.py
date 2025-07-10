@@ -66,7 +66,7 @@ response = client.chat.completions.create(
 
 answer = response.choices[0].message.content
 
-)
+
         return response.choices[0].text.strip()
     except Exception as e:
         return f"Sorry, I couldn't generate an answer due to an error: {str(e)}"
