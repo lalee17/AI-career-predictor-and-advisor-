@@ -43,33 +43,34 @@ def retrieve_relevant_docs(query, top_k=3):
     return [career_list[i] for i in top_indices]
 
 def generate_answer(question, relevant_docs):
-    context_text = ""
-    for doc in relevant_docs:
-        context_text += f"Career Title: {doc['title']}\nDescription: {doc.get('description')}\n\n"
-    prompt = (
-        f"You are an expert career advisor. Use the following career information to answer the question:\n\n"
-        f"{context_text}\n"
-        f"Question: {question}\nAnswer:"
-    )
-    from openai import OpenAI
+    try:
+        context_text = ""
+        for doc in relevant_docs:
+            context_text += f"Career Title: {doc['title']}\nDescription: {doc.get('description')}\n\n"
+        prompt = (
+            f"You are an expert career advisor. Use the following career information to answer the question:\n\n"
+            f"{context_text}\n"
+            f"Question: {question}\nAnswer:"
+        )
 
-client = OpenAI()
+        from openai import OpenAI
 
-response = client.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "user", "content": prompt},
-    ],
-    temperature=0.7,
-    n=1,
-)
+        client = OpenAI()
 
-answer = response.choices[0].message.content
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.7,
+            n=1,
+        )
 
+        answer = response.choices[0].message.content
+        return answer.strip()
 
-    return response.choices[0].text.strip()
-except Exception as e:
-    return f"Sorry, I couldn't generate an answer due to an error: {str(e)}"
+    except Exception as e:
+        return f"Sorry, I couldn't generate an answer due to an error: {str(e)}"
 
 # Full career dataset with all careers you provided
 career_data = {
