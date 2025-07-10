@@ -40,7 +40,7 @@ faiss_index = faiss.IndexFlatL2(dimension)
 faiss_index.add(career_embeddings)
 
 
-# Prepare documents for retrieval (one document per career)
+# Prepare documents for retrieval (LangChain-compatible)
 career_documents = []
 for title, details in career_data.items():
     text = f"Career: {title}\n"
@@ -52,7 +52,35 @@ for title, details in career_data.items():
     text += f"Demand: {details.get('job_demand', '')}\n"
     text += f"Tools: {', '.join(details.get('recommended_tools', []))}\n"
     text += f"Learning Paths: {', '.join(details.get('learning_paths', []))}\n"
-    career_documents.append(text)
+    career_documents.append(Document(page_content=content, metadata={"title": title}))
+
+
+# Use LangChain to embed the documents using OpenAI
+embedding_model = OpenAIEmbeddings()  # Requires OpenAI API key via environment variable
+vectorstore = LC_FAISS.from_documents(career_documents, embedding_model)
+
+# Setup RetrievalQA
+retriever = vectorstore.as_retriever()
+qa_chain = RetrievalQA.from_chain_type(
+    llm=ChatOpenAI(temperature=0),
+    chain_type="stuff",
+    retriever=retriever
+)
+
+# Streamlit chatbot interface
+st.title("🎓 Career Advisor RAG Chatbot")
+
+st.markdown("Ask me about any career — even if it’s not in the list!")
+
+user_input = st.text_input("💬 Ask your question about careers")
+
+if user_input:
+    with st.spinner("Thinking..."):
+        response = qa_chain.run(user_input)
+        st.markdown("**🤖 Answer:**")
+        st.write(response)
+
+
 
 
 
