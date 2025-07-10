@@ -53,7 +53,7 @@ def generate_answer(question, relevant_docs):
     )
     try:
         response = openai.Completion.create(
-            engine="text-davinci-003",
+            engine="gpt-3.5-turbo",
             prompt=prompt,
             max_tokens=300,
             temperature=0.7,
