@@ -2,9 +2,15 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import json
 import streamlit as st
+import os
 
+# Read the OpenAI API key securely from Streamlit secrets
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
-from langchain.vectorstores import FAISS
+# Set environment variable for OpenAI
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
+from langchain.vectorstores import FAISS as LC_FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
@@ -12,14 +18,11 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 
 from pathlib import Path
-import json
+
 # Load and parse the career.json file
 json_path = Path(__file__).parent / "careers.json"
 with open(json_path, "r") as f:
     career_data = json.load(f)
-
-from sentence_transformers import SentenceTransformer
-import faiss
 
 # Prepare data for embedding
 career_texts = []
@@ -30,36 +33,36 @@ for career, details in career_data.items():
     career_texts.append(full_text)
     career_keys.append(career)
 
-# Create embeddings
+# Create embeddings using SentenceTransformer for FAISS visual display (optional, not used by LangChain)
 model = SentenceTransformer('all-MiniLM-L6-v2')
 career_embeddings = model.encode(career_texts)
 
-# Create FAISS index
+# Create FAISS index (visual or manual query only, not used below)
 dimension = career_embeddings[0].shape[0]
 faiss_index = faiss.IndexFlatL2(dimension)
 faiss_index.add(career_embeddings)
 
-
-# Prepare documents for retrieval (LangChain-compatible)
+# Prepare documents for LangChain vector store
 career_documents = []
 for title, details in career_data.items():
-    text = f"Career: {title}\n"
-    text += f"Description: {details.get('description', '')}\n"
-    text += f"Skills: {', '.join(details.get('skills', []))}\n"
-    text += f"Subjects: {', '.join(details.get('subjects', []))}\n"
-    text += f"Work Style: {details.get('work_style', '')}\n"
-    text += f"Salary: {details.get('average_salary', '')}\n"
-    text += f"Demand: {details.get('job_demand', '')}\n"
-    text += f"Tools: {', '.join(details.get('recommended_tools', []))}\n"
-    text += f"Learning Paths: {', '.join(details.get('learning_paths', []))}\n"
-    career_documents.append(Document(page_content=content, metadata={"title": title}))
+    content = f"""
+    Career: {title}
+    Description: {details.get('description', '')}
+    Skills: {', '.join(details.get('skills', []))}
+    Subjects: {', '.join(details.get('subjects', []))}
+    Work Style: {details.get('work_style', '')}
+    Salary: {details.get('average_salary', '')}
+    Demand: {details.get('job_demand', '')}
+    Tools: {', '.join(details.get('recommended_tools', []))}
+    Learning Paths: {', '.join(details.get('learning_paths', []))}
+    """
+    career_documents.append(Document(page_content=content.strip(), metadata={"title": title}))
 
-
-# Use LangChain to embed the documents using OpenAI
-embedding_model = OpenAIEmbeddings()  # Requires OpenAI API key via environment variable
+# Embed with OpenAI and build FAISS vector store for LangChain
+embedding_model = OpenAIEmbeddings()
 vectorstore = LC_FAISS.from_documents(career_documents, embedding_model)
 
-# Setup RetrievalQA
+# Setup RetrievalQA chain
 retriever = vectorstore.as_retriever()
 qa_chain = RetrievalQA.from_chain_type(
     llm=ChatOpenAI(temperature=0),
@@ -67,9 +70,8 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=retriever
 )
 
-# Streamlit chatbot interface
-st.title("🎓 Career Advisor RAG Chatbot")
-
+# Streamlit UI
+st.title("\U0001F393 Career Advisor RAG Chatbot")
 st.markdown("Ask me about any career — even if it’s not in the list!")
 
 user_input = st.text_input("💬 Ask your question about careers")
