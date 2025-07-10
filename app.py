@@ -1,6 +1,15 @@
 from sentence_transformers import SentenceTransformer
 import faiss
+import json
 import streamlit as st
+
+
+from langchain.vectorstores import FAISS
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import RetrievalQA
 
 from pathlib import Path
 import json
