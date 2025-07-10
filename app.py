@@ -675,42 +675,7 @@ if well_being_score <= 2:
 
 
 
-st.header("🗣️ Career Advice Chatbot")
 
-if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
-
-def find_career_answer(user_msg):
-    user_msg_lower = user_msg.lower()
-    # Try to find any career keyword in user message
-    for career, data in career_data.items():
-        if career.lower() in user_msg_lower:
-            return f"**{career}**: {data['description']}\nSkills needed: {', '.join(data['skills'])}\nSubjects relevant: {', '.join(data['subjects'])}"
-        # Also check if any skill or subject is mentioned
-        for skill in data['skills']:
-            if skill.lower() in user_msg_lower:
-                return f"Career related to skill '{skill}': {career}\nDescription: {data['description']}"
-        for subject in data['subjects']:
-            if subject.lower() in user_msg_lower:
-                return f"Career related to subject '{subject}': {career}\nDescription: {data['description']}"
-    return "Sorry, I couldn't find any career information related to your question."
-
-user_input = st.chat_input("Ask me about careers, skills, or subjects")
-
-if user_input:
-    # Append user question
-    st.session_state.chat_history.append({"role": "user", "content": user_input})
-
-    # Get chatbot reply
-    reply = find_career_answer(user_input)
-
-    # Append bot reply
-    st.session_state.chat_history.append({"role": "assistant", "content": reply})
-
-# Display chat history
-for chat in st.session_state.chat_history:
-    with st.chat_message(chat["role"]):
-        st.markdown(chat["content"])
 
 
 
