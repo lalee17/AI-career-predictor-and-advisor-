@@ -538,8 +538,16 @@ career_data = {
   }
 }
 
+# Streamlit UI with two pages: Questionnaire and Chatbot
+st.set_page_config(page_title="🎓 AI Career Predictor & Advisor", layout="wide")
 st.title("🎓 AI Career Predictor & Advisor")
-st.markdown("This form collects your interests, skills, preferences and other details to recommend suitable career paths.")
+
+menu = ["Career Questionnaire", "Career Chatbot"]
+choice = st.sidebar.selectbox("Navigate", menu)
+
+if choice == "Career Questionnaire":
+    st.markdown("This form collects your interests, skills, preferences and other details to recommend suitable career paths.")
+
 
 with st.form("career_form"):
     name = st.text_input("1. Full Name")
