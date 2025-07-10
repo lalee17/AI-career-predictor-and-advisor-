@@ -1,60 +1,12 @@
 import json
 import streamlit as st
 
-
-# ✅ LangChain imports for RAG
-from langchain.vectorstores import FAISS as LC_FAISS
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.schema import Document
-from langchain.chat_models import ChatOpenAI
-from langchain.chains import RetrievalQA
-
 from pathlib import Path
 
 # ✅ Load career dataset
 json_path = Path(__file__).parent / "careers.json"
 with open(json_path, "r") as f:
     career_data = json.load(f)
-
-# ✅ Convert career data into LangChain Documents
-career_documents = []
-for title, details in career_data.items():
-    content = f"""
-    Career: {title}
-    Description: {details.get('description', '')}
-    Skills: {', '.join(details.get('skills', []))}
-    Subjects: {', '.join(details.get('subjects', []))}
-    Work Style: {details.get('work_style', '')}
-    Salary: {details.get('average_salary', '')}
-    Demand: {details.get('job_demand', '')}
-    Tools: {', '.join(details.get('recommended_tools', []))}
-    Learning Paths: {', '.join(details.get('learning_paths', []))}
-    """
-    career_documents.append(Document(page_content=content.strip(), metadata={"title": title}))
-
-# ✅ Create LangChain vector store using OpenAI embeddings
-embedding_model = OpenAIEmbeddings()
-vectorstore = LC_FAISS.from_documents(career_documents, embedding_model)
-
-# ✅ Create RAG chain
-retriever = vectorstore.as_retriever()
-qa_chain = RetrievalQA.from_chain_type(
-    llm=ChatOpenAI(temperature=0),
-    chain_type="stuff",
-    retriever=retriever
-)
-
-# ✅ Streamlit RAG chatbot UI
-st.title("🎓 Career Advisor RAG Chatbot")
-st.markdown("Ask me about any career — even if it’s not in the list!")
-
-user_input = st.text_input("💬 Ask your question about careers")
-
-if user_input:
-    with st.spinner("Thinking..."):
-        response = qa_chain.run(user_input)
-        st.markdown("**🤖 Answer:**")
-        st.write(response)
 
 
 
