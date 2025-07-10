@@ -1,48 +1,26 @@
-from sentence_transformers import SentenceTransformer
-import faiss
 import json
 import streamlit as st
 import os
 
-# Read the OpenAI API key securely from Streamlit secrets
+# ✅ Load OpenAI API key from secrets (you must set this in .streamlit/secrets.toml)
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-
-# Set environment variable for OpenAI
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
+# ✅ LangChain imports for RAG
 from langchain.vectorstores import FAISS as LC_FAISS
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 
 from pathlib import Path
 
-# Load and parse the career.json file
+# ✅ Load career dataset
 json_path = Path(__file__).parent / "careers.json"
 with open(json_path, "r") as f:
     career_data = json.load(f)
 
-# Prepare data for embedding
-career_texts = []
-career_keys = []
-
-for career, details in career_data.items():
-    full_text = f"{career}: {details['description']} Skills: {', '.join(details['skills'])}. Subjects: {', '.join(details['subjects'])}. Salary: {details['average_salary']}. Demand: {details['job_demand']}."
-    career_texts.append(full_text)
-    career_keys.append(career)
-
-# Create embeddings using SentenceTransformer for FAISS visual display (optional, not used by LangChain)
-model = SentenceTransformer('all-MiniLM-L6-v2')
-career_embeddings = model.encode(career_texts)
-
-# Create FAISS index (visual or manual query only, not used below)
-dimension = career_embeddings[0].shape[0]
-faiss_index = faiss.IndexFlatL2(dimension)
-faiss_index.add(career_embeddings)
-
-# Prepare documents for LangChain vector store
+# ✅ Convert career data into LangChain Documents
 career_documents = []
 for title, details in career_data.items():
     content = f"""
@@ -58,11 +36,11 @@ for title, details in career_data.items():
     """
     career_documents.append(Document(page_content=content.strip(), metadata={"title": title}))
 
-# Embed with OpenAI and build FAISS vector store for LangChain
+# ✅ Create LangChain vector store using OpenAI embeddings
 embedding_model = OpenAIEmbeddings()
 vectorstore = LC_FAISS.from_documents(career_documents, embedding_model)
 
-# Setup RetrievalQA chain
+# ✅ Create RAG chain
 retriever = vectorstore.as_retriever()
 qa_chain = RetrievalQA.from_chain_type(
     llm=ChatOpenAI(temperature=0),
@@ -70,8 +48,8 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=retriever
 )
 
-# Streamlit UI
-st.title("\U0001F393 Career Advisor RAG Chatbot")
+# ✅ Streamlit RAG chatbot UI
+st.title("🎓 Career Advisor RAG Chatbot")
 st.markdown("Ask me about any career — even if it’s not in the list!")
 
 user_input = st.text_input("💬 Ask your question about careers")
@@ -81,6 +59,7 @@ if user_input:
         response = qa_chain.run(user_input)
         st.markdown("**🤖 Answer:**")
         st.write(response)
+
 
 
 
